@@ -1,0 +1,3 @@
+requirement : 
+discord.py
+python-dotenv

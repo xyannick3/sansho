@@ -5,9 +5,11 @@ __pycache__/
 
 # C extensions
 *.so
-
+#personalised 
 *.env
-
+notes.txt
+*.db
+settings.json
 # Distribution / packaging
 .Python
 build/
