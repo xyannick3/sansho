@@ -1,3 +1,4 @@
 requirement : 
 discord.py
 python-dotenv
+this sucks actually ->argostranslate

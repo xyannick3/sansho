@@ -4,6 +4,7 @@ import config
 class Handlers(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        print("Handlers cog initialized.")
     
     @commands.Cog.listener()
     async def on_ready(self):
