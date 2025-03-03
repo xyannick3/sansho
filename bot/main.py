@@ -8,7 +8,7 @@ intents.message_content = True
 intents.guilds = True
 intents.members = True
 bot = commands.Bot(command_prefix=".", intents = intents)
-COGS = ["cogs.handlers", "cogs.moderation"]
+COGS = ["cogs.handlers", "cogs.moderation", "cogs.utility"]
 
 async def load_cogs():
     for cog in COGS:
