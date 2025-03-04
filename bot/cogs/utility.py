@@ -8,9 +8,18 @@ class Utility(commands.Cog):
         print("Utiliy cog initialized.")
     
     def fix_twitter_urls(self, message):
-        message = re.sub(r"https?://(www\.)?(x|twitter)\.com", "https://vxtwitter.com", message)
-        message = re.sub(r"\?.*", "", message)
+        # Match only Twitter/X URLs
+        pattern = r"(https?://(?:www\.)?(?:x|twitter)\.com[^\s]*)"
+        matches = re.findall(pattern, message)
+
+        for url in matches:
+            # Remove query parameters (everything after ?)
+            cleaned_url = re.sub(r"\?.*", "", url)
+            fixed_url = cleaned_url.replace("twitter.com", "vxtwitter.com").replace("x.com", "vxtwitter.com")
+            message = message.replace(url, fixed_url)
+
         return message
+
     
 
 
