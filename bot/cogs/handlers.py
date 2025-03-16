@@ -22,7 +22,9 @@ class Handlers(commands.Cog):
         Handles errors.
         """
         if isinstance(error, commands.CommandNotFound):
-            await ctx.send("Uknown command! Use `.help` to see available commands.")
+            if(len(ctx.message.content) < 2) :
+                return
+            await ctx.send("Uknown command! Use `&help` to see available commands.")
         elif isinstance(error, commands.MissingPermissions):
             await ctx.send("You don't have permission to use this command!")
         else :

@@ -256,6 +256,68 @@ class Moderation(commands.Cog):
         if log_channel:
             await log_channel.send(f"{member.name} was unshamed by {ctx.author.name}.")
 
+    ###################SHAMEALL############################
+
+    @commands.command(name="shamenuke")
+    @commands.has_permissions(manage_roles=True)
+    async def shamenuke(self, ctx, duration="10m") :
+        """
+        to use if very upset >:v with everyone (might break the bot)
+        """
+        guild = ctx.guild
+        shame_role = guild.get_role(config.SHAME_ROLE)
+        if not shame_role:
+            return await ctx.send("Error: Shame role not found!")
+        
+        time_units = {"s": 1, "m": 60, "h": 3600, "d": 86400}
+        unit = duration[-1]
+        if unit not in time_units or not duration[:-1].isdigit():
+            return await ctx.send("Invalid duration format! Use `1h`, `30m`, `2d`, etc.")
+        duration_seconds = int(duration[:-1]) * time_units[unit]
+
+        shamed_count = 0
+
+        for member in guild.members: 
+            await member.add_roles(shame_role)
+            db.add_shame(member.id, guild.id, duration_seconds)
+            shamed_count +=1
+        await ctx.send(f" **SHAME NUKE ACTIVATED!** {shamed_count} users have been shamed for {duration}.")
+
+        log_channel = guild.get_channel(config.LOG_CHANNEL)
+        if log_channel :
+            log_channel.send(f" **Shame Nuke Activated by {ctx.author.name}!**")
+
+    ###################UNSHAMEALL##########################
+
+    @commands.command(name="unshameall")
+    @commands.has_permissions(manage_roles=True)
+    async def unshameall(self, ctx):
+        """
+        removes shame for all users in the server.
+        """
+        guild = ctx.guild
+        shame_role = guild.get_role(config.SHAME_ROLE)
+        megashame_role = guild.get_role(config.MEGASHAME_ROLE)
+
+        if not shame_role or not megashame_role :
+            return await ctx.send("Error: shame roles not found!")
+        
+        unshamed_count = 0
+
+
+        for member in guild.members:
+            if shame_role in member.roles or megashame_role in member.roles:
+                await member.remove_roles(shame_role, megashame_role)
+                db.remove_shame(member.id)
+                unshamed_count += 1
+
+        await ctx.send(f"**Shame Purge Complete!** {unshamed_count} users have been freed.")
+        
+        log_channel = guild.get_channel(config.LOG_CHANNEL)
+        if log_channel:
+            await log_channel.send(f" **Shame purge by {ctx.author.name}!**")
+
+
     ##################AUTOMATIC UNSHAME PROCESSS###########
 
     @tasks.loop(minutes=1)
@@ -288,6 +350,9 @@ class Moderation(commands.Cog):
             else :
                 print("guild not found")
 
+
+
+    
 
 
 
