@@ -1,5 +1,6 @@
 import discord
 import config
+import asyncio
 from discord.ext import commands, tasks
 import services.database as db
 class Moderation(commands.Cog):
@@ -264,6 +265,7 @@ class Moderation(commands.Cog):
         """
         to use if very upset >:v with everyone (might break the bot)
         """
+        ctx.send("nuke request acknowledged, please await")
         guild = ctx.guild
         shame_role = guild.get_role(config.SHAME_ROLE)
         if not shame_role:
@@ -276,11 +278,17 @@ class Moderation(commands.Cog):
         duration_seconds = int(duration[:-1]) * time_units[unit]
 
         shamed_count = 0
+        
+        members_to_shame = [
+            member for member in guild.members
+        ]
+        shamed_count = len(members_to_shame)
 
-        for member in guild.members: 
-            await member.add_roles(shame_role)
+        await asyncio.gather(*[member.add_roles(shame_role) for member in members_to_shame])
+
+        for member in members_to_shame:
             db.add_shame(member.id, guild.id, duration_seconds)
-            shamed_count +=1
+        
         await ctx.send(f" **SHAME NUKE ACTIVATED!** {shamed_count} users have been shamed for {duration}.")
 
         log_channel = guild.get_channel(config.LOG_CHANNEL)
@@ -302,14 +310,16 @@ class Moderation(commands.Cog):
         if not shame_role or not megashame_role :
             return await ctx.send("Error: shame roles not found!")
         
-        unshamed_count = 0
+        member_to_unshame = [
+            member for member in guild.members
+        ]
 
+        unshamed_count = len(member_to_unshame)
 
-        for member in guild.members:
-            if shame_role in member.roles or megashame_role in member.roles:
-                await member.remove_roles(shame_role, megashame_role)
-                db.remove_shame(member.id)
-                unshamed_count += 1
+        await asyncio.gather(*[member.remove_roles(shame_role, megashame_role) for member in member_to_unshame])
+
+        for member in member_to_unshame:
+            db.remove_shame(member.id)
 
         await ctx.send(f"**Shame Purge Complete!** {unshamed_count} users have been freed.")
         
