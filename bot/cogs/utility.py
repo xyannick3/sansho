@@ -8,7 +8,18 @@ class Utility(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         print("Utiliy cog initialized.")
+        self.keywords = ["kms", "killing myself", "suicide", "kys", "kill myself"]
     
+    async def anti_suicide_prevention(self, message) : 
+        """
+        This is a feature that is intended to send a motivational video.
+        """
+        file_path = 'bot/services/media/neverKYS.mp4'
+        try: 
+            await message.reply("never kys ^^", file=discord.File(file_path))
+        except:
+            await message.channel.send("Oops, I couldn't find the file!")
+
     def amount_of_full_moons(self, date_start) :
         """
         calculates the amount of full moons since the date put in input til today
@@ -70,6 +81,15 @@ class Utility(commands.Cog):
     async def on_message(self, message):
         if message.author.bot:
             return
+        
+        message_lower = message.content.lower()
+
+        if any(word in message_lower for word in self.keywords):
+            await self.anti_suicide_prevention(message)
+            return
+
+        
+
         fixed_content = self.fix_twitter_urls(message.content)
         
         if fixed_content != message.content:
