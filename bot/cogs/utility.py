@@ -3,6 +3,8 @@ import config
 import re
 import datetime
 import ephem
+import random
+import os
 from discord.ext import commands, tasks
 class Utility(commands.Cog):
     def __init__(self, bot):
@@ -110,6 +112,32 @@ class Utility(commands.Cog):
             await ctx.reply(f"Error: {str(e)}", mention_author=False)
         except Exception as e:
             await ctx.reply(f"An error happened: {str(e)}", mention_author=False)
+
+
+    @commands.command(name="pat")
+    async def pat(self, ctx, member: discord.Member = None):
+        """
+        Sends a random pat image or create a pat gif with mentioned user's avatar
+        Usage: &pat or &pat @user
+        """
+        if member is None:
+            pat_dir = 'bot/services/media/pat'
+            try:
+                #Get all images files from the directory 
+                image_files = [f for f in os.listdir(pat_dir) if f.lower().endswith(('.png', '.jpg', '.gif'))]
+                if not image_files:
+                    await ctx.send("No pat images found in the directory!")
+                    return
+                #Select random image
+                random_image = random.choice(image_files)
+                file_path = os.path.join(pat_dir, random_image)
+
+                #send the image
+                await ctx.send("awawawawa", file=discord.File(file_path))
+            except Exception as e:
+                await ctx.send(f"Error loading pat image: {str(e)}")
+        else : 
+            await ctx.send(f"amma be real with you chief that one's annoying to do so it'll be done later, {member.mention} consider yourself patted.")
 
 async def setup(bot) :
     await bot.add_cog(Utility(bot))
