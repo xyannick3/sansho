@@ -10,7 +10,7 @@ class Utility(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         print("Utiliy cog initialized.")
-        self.keywords = ["kms", "killing myself", "suicide", "kys", "kill myself"]
+        self.keywords = ["kms", "killing myself", "kys", "kill myself"]
         self.instagram = ["instagram"] 
     async def anti_suicide_prevention(self, message) : 
         """
