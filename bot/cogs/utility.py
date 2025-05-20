@@ -11,7 +11,7 @@ class Utility(commands.Cog):
         self.bot = bot
         print("Utiliy cog initialized.")
         self.keywords = ["kms", "killing myself", "suicide", "kys", "kill myself"]
-    
+        self.instagram = ["instagram"] 
     async def anti_suicide_prevention(self, message) : 
         """
         This is a feature that is intended to send a motivational video.
@@ -86,11 +86,14 @@ class Utility(commands.Cog):
         
         message_lower = message.content.lower()
 
+        if any(word in message_lower for word in self.instagram) :
+            await message.edit(suppress=True)
+            return
+
         if any(word in message_lower for word in self.keywords) and  not(message.channel.id == config.HEAVY_CHANNEL):
             await self.anti_suicide_prevention(message)
             return
 
-        
 
         fixed_content = self.fix_twitter_urls(message.content)
         
