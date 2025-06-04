@@ -71,7 +71,7 @@ class Utility(commands.Cog):
         for url in matches:
             # Remove query parameters (everything after ?)
             cleaned_url = re.sub(r"\?.*", "", url)
-            fixed_url = cleaned_url.replace("twitter.com", "skibidix.com").replace("x.com", "skibidix.com")
+            fixed_url = cleaned_url.replace("x.com", "skibidix.com").replace("twitter.com", "skibidix.com")
             message = message.replace(url, fixed_url)
 
         return message
