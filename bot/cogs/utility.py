@@ -11,7 +11,9 @@ class Utility(commands.Cog):
         self.bot = bot
         print("Utiliy cog initialized.")
         self.keywords = ["kms", "killing myself", "kys", "kill myself"]
-        self.instagram = ["instagram"] 
+        self.instagram = ["instagram"]
+        self.annoy_yan.start()
+        print("Utility cog ready. QOTW check loop running:", self.annoy_yan.is_running()) 
     async def anti_suicide_prevention(self, message) : 
         """
         This is a feature that is intended to send a motivational video.
@@ -141,6 +143,21 @@ class Utility(commands.Cog):
                 await ctx.send(f"Error loading pat image: {str(e)}")
         else : 
             await ctx.send(f"amma be real with you chief that one's annoying to do so it'll be done later, {member.mention} consider yourself patted.")
+
+    @tasks.loop(minutes=60)
+    async def annoy_yan(self) :
+        """
+        fonction who's aim is to PING YAN on a certain time to tell him to come up with a QOTW
+        """
+        log_channel = self.bot.get_channel(config.LOG_CHANNEL)
+        if log_channel :
+            role = log_channel.guild.get_role(config.QOTW_RESPONSIBLE)
+            if role : 
+                now = datetime.datetime.now()
+                if now.weekday() == 5 and now.hour == 13 :
+                    await log_channel.send(f"YANNNIIIKCK DO THE FUCKING QOTW THING {role.mention}")
+            
+
 
 async def setup(bot) :
     await bot.add_cog(Utility(bot))
