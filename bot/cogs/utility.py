@@ -30,6 +30,7 @@ class Utility(commands.Cog):
     "I'm not a fucking 8 ball fortune teller.",
     "ig so.",
     "non.",
+    "ask sib.",
     "ask ade.",
     "don't ask yan.",
     "nuhuh.",
