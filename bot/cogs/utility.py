@@ -14,6 +14,30 @@ class Utility(commands.Cog):
         self.instagram = ["instagram"]
         self.annoy_yan.start()
         print("Utility cog ready. QOTW check loop running:", self.annoy_yan.is_running()) 
+        self.DON_RANTS = [
+    "Manager Esquire, dost thou knowst about the grim fate of the penguins of Antartica...",
+    "ああああああああああああああああああああああああああああああああああああああああああっ!!",
+    "The audacity of asking me that... unbelievable! >:c utter falsehood.",
+    "Every time someone asks 'is this true?', I lose brain cells. Of course it ain't."
+    "You want truth? Go outside and touch some grass first.",
+    "No it isn't,",
+    "Maybe it is maybe not.",
+    "...sharks.... They know... Go ask them..",
+    "I hate this job. Yea probably true.",
+    "True? YOU CANT HANDLE THE TRUTH!", 
+    "Just use Google you troglodyte, it's true >:c",
+    "Fact check by true sleep deprived propagandist, True!",
+    "I'm not a fucking 8 ball fortune teller.",
+    "ig so.",
+    "non.",
+    "ask ade.",
+    "don't ask yan.",
+    "nuhuh.",
+    "yuhuh.",
+    "no idea mate.",
+    "Something went wrong, warn yan",
+    "&shamenuke"
+    ]
     async def anti_suicide_prevention(self, message) : 
         """
         This is a feature that is intended to send a motivational video.
@@ -103,6 +127,10 @@ class Utility(commands.Cog):
             print("something was actually done")
             await message.reply(fixed_content, mention_author = False)
             await message.edit(suppress=True)
+        #don is that true check
+        if ("is that true?" in message.content.lower())or ("is this true?" in message.content.lower()) and self.bot.user in message.mentions:
+            await message.reply(random.choice(self.DON_RANTS))
+
 
     @commands.command(name="full_moons")
     async def full_moon_command(self, ctx, date_str: str):
