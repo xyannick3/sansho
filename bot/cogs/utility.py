@@ -98,7 +98,10 @@ class Utility(commands.Cog):
         for url in matches:
             # Remove query parameters (everything after ?)
             cleaned_url = re.sub(r"\?.*", "", url)
-            fixed_url = cleaned_url.replace("x.com", "skibidix.com").replace("twitter.com", "skibidix.com")
+            fixed_url = cleaned_url.replace("x.com", "fixupx.com").replace("twitter.com", "fixupx.com")
+            if not fixed_url.endswith("/en"):
+
+                fixed_url += "/en"
             message = message.replace(url, fixed_url)
 
         return message
@@ -129,7 +132,11 @@ class Utility(commands.Cog):
             await message.reply(fixed_content, mention_author = False)
             await message.edit(suppress=True)
         #don is that true check
-        if ("is that true?" in message.content.lower())or ("is this true?" in message.content.lower()) and self.bot.user in message.mentions:
+        if ((("is that true ?" in message.content.lower()) 
+        or ("is this true ?" in message.content.lower())
+        or ("is that true?" in message.content.lower())
+        or ("is this true?" in message.content.lower())) 
+        and self.bot.user in message.mentions):
             await message.reply(random.choice(self.DON_RANTS))
 
 
