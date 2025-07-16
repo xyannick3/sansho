@@ -3,6 +3,7 @@ import config
 import asyncio
 from discord.ext import commands, tasks
 import services.database as db
+import datetime, pytz
 class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -14,6 +15,7 @@ class Moderation(commands.Cog):
         self.log_channel = self.bot.get_channel(config.LOG_CHANNEL)
         self.check_mutes.start()
         self.check_shame.start()
+        self.daily_mute.start()
         print("Moderation cog ready. Mute check loop running :", self.check_mutes.is_running())
         print("Moderation cog ready. Shame check loop running:", self.check_shame.is_running())
 
@@ -361,8 +363,31 @@ class Moderation(commands.Cog):
                 print("guild not found")
 
 
+    @tasks.loop(minutes=1)
+    async def daily_mute(self) :
+        """
+        mute someone because he's been bad and needs his bed time
+        """
+        est_tz = pytz.timezone("America/New_York")
+        now_est = datetime.datetime.now(est_tz)
+        log_channel = self.bot.get_channel(config.LOG_CHANNEL)
+        member_role = log_channel.guild.get_role(config.MEMBER_ROLE)
+        shameboxed_role = log_channel.guild.get_role(config.MUTE_ROLE)
 
-    
+
+        if now_est.hour == 2 and now_est.minute == 0 :
+            if log_channel : 
+                member = log_channel.guild.get_member(config.BEDTIME_MEMBER)
+                await log_channel.send(f"{member.name}'s bedtime is now")
+
+            await member.remove_roles(member_role)
+            await member.add_roles(shameboxed_role)
+
+            #Store in database
+
+            db.add_mute(member.id, log_channel.guild.id, 6*60*60) # 6h in seconds
+            if log_channel :
+                await log_channel.send(f"{member.name} has been muted for 6h")
 
 
 
