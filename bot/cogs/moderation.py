@@ -15,7 +15,7 @@ class Moderation(commands.Cog):
         self.log_channel = self.bot.get_channel(config.LOG_CHANNEL)
         self.check_mutes.start()
         self.check_shame.start()
-        self.daily_mute.start()
+        #self.daily_mute.start()
         print("Moderation cog ready. Mute check loop running :", self.check_mutes.is_running())
         print("Moderation cog ready. Shame check loop running:", self.check_shame.is_running())
 
