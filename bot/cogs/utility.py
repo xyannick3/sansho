@@ -116,9 +116,9 @@ class Utility(commands.Cog):
         
         message_lower = message.content.lower()
 
-        if any(word in message_lower for word in self.instagram) :
-            await message.edit(suppress=True)
-            return
+#        if any(word in message_lower for word in self.instagram) :
+#            await message.edit(suppress=True)
+#            return
 
         if any(word in message_lower for word in self.keywords) and  not(message.channel.id == config.HEAVY_CHANNEL):
             await self.anti_suicide_prevention(message)
